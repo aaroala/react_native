@@ -1,0 +1,10 @@
+post http://localhost:4000
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxYjEwZTRkOC01N2VlLTRkMDAtODg4Ni1lNGEwNDlkN2ZmOGYiLCJpYXQiOjE2NjQ4NjAwNzYsImV4cCI6MjI2OTY2MDA3Niwic3ViIjoiYWNjZXNzVG9rZW4ifQ.7ILEbez5Xn-173by5ZF9ovduupAEmP4Htt6ZkE_kl5g
+
+mutation {
+  createReview(review: {ownerName: "rzwitserloot", repositoryName: "lombok", rating: 12}) {
+    id
+  }
+}

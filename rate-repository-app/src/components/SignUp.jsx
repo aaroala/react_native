@@ -5,8 +5,9 @@ import FormikTextInput from './FormikTextInput';
 import { Pressable } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import * as yup from 'yup';
-
-import useSignIn from '../hooks/useSignIn';
+import { CREATE_USER, SIGN_IN } from '../graphql/mutations';
+import { useApolloClient, useMutation } from '@apollo/client';
+import useAuthStorage from '../hooks/useAuthStorage';
 
 
 
@@ -37,13 +38,17 @@ const validationSchema = yup.object().shape({
     .string()
     .min(2, 'Password is too short!')
     .required('Password is required'),
-});
-
+  confirmPassword: yup.string()
+  .test('passwords-match', 'Passwords must match', 
+    function (value) { return this.parent.password === value })
+})
 
 const initialValues = {
   username: '',
   password: '',
+  confirmPassword: '',
 };
+
 
 export const SignInContainer = ({onSubmit}) => {
   return(
@@ -52,9 +57,10 @@ export const SignInContainer = ({onSubmit}) => {
         <View>
           <FormikTextInput name="username" placeholder="Username" />
           <FormikTextInput name="password" placeholder="Password" />
+          <FormikTextInput name="confirmPassword" placeholder="Confirm password" />
           <Pressable onPress={handleSubmit}>
             <View style={styles.signInButton}>
-              <Text style={styles.signInText}>Sign up</Text>
+              <Text style={styles.signInText}>Sign in</Text>
             </View>
           </Pressable>
         </View>
@@ -64,8 +70,11 @@ export const SignInContainer = ({onSubmit}) => {
 }
 
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
+const SignUp = () => {
+  const authStorage = useAuthStorage();
+  const apolloClient = useApolloClient();
+  const [mutate, result] = useMutation(CREATE_USER);
+  const [mutate2, result2] = useMutation(SIGN_IN);
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
@@ -73,7 +82,13 @@ const SignIn = () => {
     console.log(username, password)
 
     try {
-      await signIn({ username, password });
+      //await signIn({ username, password });
+      const created = await mutate({ variables: { username, password }})
+      const { data } = await mutate2({ variables: { username, password }})
+      console.log("data", data)
+
+      await authStorage.setAccessToken(data.authenticate.accessToken);
+      apolloClient.resetStore();
       navigate('/')
     } catch (e) {
       console.log(e);
@@ -83,4 +98,4 @@ const SignIn = () => {
   return(<SignInContainer onSubmit={onSubmit}/>)
 };
 
-export default SignIn;
+export default SignUp;

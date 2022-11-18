@@ -1,4 +1,5 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { useNavigate, Link } from 'react-router-native';
+import { View, StyleSheet, Image, Pressable } from 'react-native';
 import Text from './Text';
 
 
@@ -55,6 +56,15 @@ const cardStyles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white'
   },
+  git_button: {
+    backgroundColor: 'blue',
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 3,
+    borderRadius: 4,
+    color: 'white',
+    marginTop: 5,
+  }
 });
 
 
@@ -107,32 +117,32 @@ const CardFooter = ({ item }) => {
 
 
 
-const RepositoryItem = ({ item }) => {
-  return(
-    <View style={cardStyles.container}>
-        <CardHeader  item={item} />
-      <CardFooter item={item} />
-    </View>
-  )
-}
+const RepositoryItem = (props) => {
+    //const navigate = useNavigate()
 
-/**
- *       Full name: {item.fullName} <br />
-      Description: {item.description} <br />
-      Language: {item.language} <br />
-      Stars: {item.stargazersCount} <br />
-      Forks: {item.forksCount} <br />
-      Reviews: {item.reviewCount} <br />
-      Rating: {item.ratingAverage} <br />
-      <View style={styles.flexContainer}>
-        <View style={styles.flexItemA}>
-          <Text>Flex item A</Text>
-          <Text>Flex item C</Text>
+    const item = props.item
+
+    // const handlePress = () => {
+    //   console.log('repository/' + item.id + "/"+ props)
+    //   if (item.id) {
+    //     navigate('repository/' + item.id)
+    //   }
+    // }
+
+    return(
+      <Link to={'repository/' + item.id}>
+        <View testID="repositoryItem" style={cardStyles.container}>
+          <CardHeader  item={item} />
+          <CardFooter item={item} />
+          {props.git_btn_visible ? 
+            <View style={cardStyles.git_button}>
+              <Text color="white">Open in GitHub</Text></View>
+            :
+            <></>
+          }
         </View>
-        <View style={styles.flexItemB}>
-          <Text>Flex item B</Text>
-        </View>
-      </View>
- */
+      </Link>
+    )
+}
 
 export default RepositoryItem

@@ -1,0 +1,21 @@
+post http://localhost:4000
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  repositories(searchKeyword: "ze") {
+    edges {
+      node {
+        id
+        ownerAvatarUrl
+        fullName
+        description
+        language
+        stargazersCount
+        forksCount
+        reviewCount
+        ratingAverage
+      }
+    }
+  }
+}

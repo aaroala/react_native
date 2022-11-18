@@ -16,20 +16,13 @@ const tabBarStyle = StyleSheet.create({
   }
 });
 
-const AppBarTab = () => {
+const AppBarTab = ({name, to}) => {
   return(
-    <ScrollView horizontal>
       <View style={tabBarStyle.tabItemContainer}>
-        <Link to="/">
-          <Text color='white' >Repository</Text>
+        <Link to={to}>
+          <Text color='white'>{name}</Text>
         </Link>
       </View>
-      <View style={tabBarStyle.tabItemContainer}>
-        <Link to="/sign-in">
-          <Text color='white' >Sign in</Text>
-        </Link>
-      </View>
-    </ScrollView>
   )
 }
 

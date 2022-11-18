@@ -1,0 +1,9 @@
+post http://localhost:4000
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  authenticate(credentials: { username: "matti", password: "password" }) {
+    accessToken
+  }
+}
